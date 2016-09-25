@@ -5,12 +5,9 @@
  */
 package mscapplication.decryption;
 
-
 import java.io.IOException;
 import mscapplication.application.ApplicationController;
 import mscapplication.main.MainView;
-import mscapplication.application.ApplicationView;
-import mscapplication.models.CAGrid;
 import mscapplication.models.RoundKeys;
 
 /**
@@ -29,44 +26,24 @@ private int timeSpacing;
 private int siteSpacing;
 private Boolean xorSiteSpacing;
     
-public DecryptionController () {
-    
-    
-    
-}
+public DecryptionController () {}
     
     public void startDecryption () throws IOException {
         
         this.applicationController = ApplicationController.getApplicationController();
         this.mainView = applicationController.getMainView();
         roundKeys = this.applicationController.getRoundKeys();
-
-        
+    
         IVString = applicationController.getIVInstance();
   
         decryptionModel = new DecryptionModel();
-         timeSpacing = mainView.getTimeSpacing();
-         siteSpacing = mainView.getSiteSpacing();
-         boundaryConditions = mainView.getPeriodicBoundaryCondition();
-         xorSiteSpacing = mainView.getXorSiteSpacingCheckBox();
-        
-//        if(mainView.getPeriodicBoundaryRadioButton() == true ) {
-//            
-//           boundaryConditions = 1;
-//        }
-//       else {
-//            boundaryConditions = 0;
-//        }  
-//        
-        
-        
+        timeSpacing = mainView.getTimeSpacing();
+        siteSpacing = mainView.getSiteSpacing();
+        boundaryConditions = mainView.getPeriodicBoundaryCondition();
+        xorSiteSpacing = mainView.getXorSiteSpacingCheckBox();
         
         int EncryptionMode;
-        
-        
-        
-   
-        
+
         if(mainView.getCBCRadioButton() == true ) 
         {
             EncryptionMode = 1;
@@ -84,28 +61,15 @@ public DecryptionController () {
         else {
             fileMode = 0;
         }
-        
-        
-        
-        
+ 
         decryptionModel.runDecryption(roundKeys, IVString, Integer.parseInt(mainView.getNumberOfFeistalRounds()), EncryptionMode, fileMode, boundaryConditions, timeSpacing, siteSpacing,  xorSiteSpacing);
     }
     
-    //if the decryption hasn't happened then there is no model
-    //need to move the model to the Application controller
-    
-    public void resetDecryption () {
-        
+    public void resetDecryption () {    
         decryptionModel.resetDecryption();
-         
     }
     
-    public String getCompleteCipherText () {
-        
-       return decryptionModel.getCompletePlainText();
-       
-    } 
-    
-    
-    
+    public String getCompleteCipherText () {      
+       return decryptionModel.getCompletePlainText();     
+    }   
 }

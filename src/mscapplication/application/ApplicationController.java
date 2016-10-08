@@ -19,17 +19,10 @@ import mscapplication.main.MainView;
 import mscapplication.filelocation.FileLocationController;
 import mscapplication.decryption.DecryptionView;
 import mscapplication.models.CAGrid;
-//import mscapplication.models.HybridRules;
 import mscapplication.encryption.EncryptionController;
 import mscapplication.models.Key;
 import mscapplication.models.RoundKeys;
-import mscapplication.nisttests.NISTTest1;
-import mscapplication.nisttests.NISTTest2;
-import mscapplication.nisttests.NISTTest3;
-import mscapplication.nisttests.NISTTest4;
-import mscapplication.nisttests.NISTTest5;
-import mscapplication.nisttests.NISTTest6;
-import mscapplication.nisttests.NISTTest7;
+import mscapplication.nisttests.*;
 import mscapplication.utils.NumberUtils;
 import mscapplication.utils.StringUtils;
 
@@ -52,12 +45,11 @@ public class ApplicationController {
    private NISTTest1 nistTest;
    private NISTTest2 nistTest2;
    private NISTTest3 nistTest3;
-      private NISTTest4 nistTest4;
-            private NISTTest5 nistTest5;
-             private NISTTest6 nistTest6;
-             private NISTTest7 nistTest7;
+   private NISTTest4 nistTest4;
+   private NISTTest5 nistTest5;
+   private NISTTest6 nistTest6;
+   private NISTTest7 nistTest7;
    private CAGrid  gridLabels;
-//   private HybridRules hybridRules;
    private Key key;
    private String keyInstance;
    private String IVInstance;
@@ -92,7 +84,6 @@ public class ApplicationController {
    //instantiate controllers
    //encryption controller - currently passing that an applicationView, to be replaced
    //with encryptionView at some point
-//   ApplicationController.this.createGrid();
    fileLocationController = new FileLocationController();
    
    mainController = new MainController(this, mainView, fileLocationController);
@@ -105,20 +96,14 @@ public class ApplicationController {
     this.applicationView.addEncryptionButtonActionListener(new EncryptionButtonNewListener());
     this.applicationView.decryptButtonActionListener (new DecryptButtonListener());
     this.applicationView.generateKeyButtonActionListener (new GenerateKeyButtonListener());
-//    this.applicationView.addGenerateHybridRulesButtonActionListener (new GenerateHybridRulesButtonListener());
     this.mainView.useExternalFilesCheckBoxActionListener (new UseExternalFilesCheckBoxActionListener()); 
     this.applicationView.addResetApplicationButtonActionListener (new resetApplicationButtonListener());  
     this.applicationView.addRunNISTTestsButtonListener(new runNISTTestsButtonListener());
     
     
-    //disable all buttons on launch except for Key generation
-    
+    //disable all buttons on launch except for Key generation   
     this.applicationView.setDecryptButtonState(false);
-    this.applicationView.setEncryptButtonState(false);
-//    this.applicationView.setGenerateHybridRulesButtonState(false);
-    
- 
-    
+    this.applicationView.setEncryptButtonState(false); 
     
    }
    
@@ -141,37 +126,24 @@ public class ApplicationController {
             
            roundKeysInstance = new RoundKeys(Integer.parseInt(mainView.getNumberOfFeistalRounds()),keyInstance, 0); 
         }    
-            
-//        mainView.setKeyTextArea(keyInstance);
-//        mainView.setIVTextArea(IVInstance);
-//        mainView.setRoundKeysTextArea(roundKeysInstance.getRoundKeyMap());
-//        mainView.setHybridRulesTable(mainView.getHybridRulesTable(roundKeysInstance.getRoundKeyDecimalRuleMap()));
-        
-
-//        ApplicationController.this.applicationView.setGenerateHybridRulesButtonState(true);
-//this.applicationView.setEncryptButtonState(true);
-//this.applicationView.setDecryptButtonState(true);
     }
    
    
    public void setKeysOnMainView () {
        
-       mainView.setKeyTextArea(keyInstance);
-        mainView.setIVTextArea(IVInstance);
-        mainView.setRoundKeysTextArea(roundKeysInstance.getRoundKeyMap());
-        
-        mainView.setHybridRulesTable(mainView.getHybridRulesTable(roundKeysInstance.getRoundKeyDecimalRuleMap()));
-        
-       this.applicationView.setEncryptButtonState(true);
-this.applicationView.setDecryptButtonState(true);
+    mainView.setKeyTextArea(keyInstance);
+    mainView.setIVTextArea(IVInstance);
+    mainView.setRoundKeysTextArea(roundKeysInstance.getRoundKeyMap());
+    mainView.setHybridRulesTable(mainView.getHybridRulesTable(roundKeysInstance.getRoundKeyDecimalRuleMap()));
+    this.applicationView.setEncryptButtonState(true);
+    this.applicationView.setDecryptButtonState(true);
        
    }
    
    
    public HashMap getRoundKeyDecimalRulesHashMap () {
        
-       return RoundKeyDecimalRulesHashMap;
-       
+       return RoundKeyDecimalRulesHashMap;      
    }
    
    public String getKeyInstance () {
@@ -184,29 +156,20 @@ this.applicationView.setDecryptButtonState(true);
        return IVInstance;
    }
    
-//   public void setIVInstance (String IVValue) {
-//       
-//       IVInstance = IVValue;
-//   }
    
    public void setKey (String keyValue, String IVValue) {
        
-        this.keyInstance = key.generateStartingKey(keyValue);
-       //this.keyInstance = keyValue;
-        
+        this.keyInstance = key.generateStartingKey(keyValue);       
         this.IVInstance = IVValue;
        
-           if (mainView.getRoundKeyCheckBox() == true) {
+        if (mainView.getRoundKeyCheckBox() == true) {
         
-      //  this.roundKeysInstance = new RoundKeys(Integer.parseInt(mainView.getNumberOfFeistalRounds()),keyInstance, 1);
         
         this.roundKeysInstance.updateRoundKeys(Integer.parseInt(mainView.getNumberOfFeistalRounds()),keyInstance, 1);
         
         }
         else
         {
-            
-       //    this.roundKeysInstance = new RoundKeys(Integer.parseInt(mainView.getNumberOfFeistalRounds()),keyInstance, 0); 
            this.roundKeysInstance.updateRoundKeys(Integer.parseInt(mainView.getNumberOfFeistalRounds()),keyInstance, 1);
         }    
    
@@ -222,44 +185,34 @@ this.applicationView.setDecryptButtonState(true);
        
      this.encryptionController.resetEncryption();   
      this.decryptionControllerNew.resetDecryption();
-     this.fileLocationController.cleanUpFiles();
-        
-        
+     this.fileLocationController.cleanUpFiles();     
     }
    
     
     public void runNISTTest () throws IOException, InterruptedException {
         
-       nistTest = new NISTTest1 (this); 
-      nistTest2 = new NISTTest2 (this); 
+        nistTest = new NISTTest1 (this); 
+        nistTest2 = new NISTTest2 (this); 
         nistTest3 = new NISTTest3 (this); 
-          nistTest4 = new NISTTest4 (this); 
-                    nistTest5 = new NISTTest5 (this); 
-       nistTest6 = new NISTTest6 (this); 
-             nistTest7 = new NISTTest7 (this); 
+        nistTest4 = new NISTTest4 (this); 
+        nistTest5 = new NISTTest5 (this); 
+        nistTest6 = new NISTTest6 (this); 
+        nistTest7 = new NISTTest7 (this); 
        
-      nistTest.keyAvalancheTest1();
-     nistTest2.plainTextAvalancheTest();
+        nistTest.keyAvalancheTest1();
+        nistTest2.plainTextAvalancheTest();
         nistTest3.plainTextCipherTextCorrelationTest();
-//           
-//              nistTest4.cipherBlockChainingMode();
-       nistTest5.randomPlainTextRandomKey();
-      nistTest6.lowDensityPlainTextTest();   
+        nistTest4.cipherBlockChainingMode();
+        nistTest5.randomPlainTextRandomKey();
+        nistTest6.lowDensityPlainTextTest();   
         nistTest7.highDensityPlainTextTest(); 
-//        
-                    
-                    
-
-   
     }
 
    
     class EncryptionButtonNewListener implements ActionListener{
         @Override     
             public void actionPerformed(ActionEvent e) {
-            
-                
-               
+  
             try {
                 //first step in the encryption process
                 ApplicationController.this.encryptionController.startEncryption();
